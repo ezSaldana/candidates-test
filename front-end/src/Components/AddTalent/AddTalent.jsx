@@ -67,13 +67,15 @@ const AddTalent = () => {
   // }, [coords])
 
   useEffect(() => {
-    (async () => {
-      const { degrees } = await fetch('http://localhost:1234/degrees').then(res => res.json());
-      const { positions } = await fetch('http://localhost:1234/positions').then(res => res.json());
-      const { industries } = await fetch('http://localhost:1234/industries').then(res => res.json());
-      setInputs({ ...inputs, degrees, positions, industries });
-    })();
-  }, [])
+    if ((inputs.degrees.length || inputs.industries.length || inputs.positions.length) === 0) {
+      (async () => {
+        const { degrees } = await fetch('http://localhost:1234/degrees').then(res => res.json());
+        const { positions } = await fetch('http://localhost:1234/positions').then(res => res.json());
+        const { industries } = await fetch('http://localhost:1234/industries').then(res => res.json());
+        setInputs({ ...inputs, degrees, positions, industries });
+      })();
+    }
+  }, [inputs])
 
   const handleInputchange = ({ target }) => {
     target.value !== (undefined || '')
@@ -246,14 +248,26 @@ const AddTalent = () => {
             />
           </Grid>
         </Grid>
-        <Grid container item lg={3} >
+        <Grid container item direction='column' alignItems='stretch' lg={3} spacing={1} >
           {/* <div ref={mapContainer} style={{ height: '100%', width: '100%', borderRadius: '5px' }} /> */}
-          <Map
-            style="mapbox://styles/mapbox/streets-v9"
-            center={coords}
-            containerStyle={{ height: '100%', width: '100%' }}
-            zoom={[14]}
-          />
+          <Grid item style={{ flexGrow: 1, width: '100%' }}>
+            <Map
+              style="mapbox://styles/mapbox/streets-v9"
+              center={coords}
+              containerStyle={{ height: '100%', width: '100%' }}
+              zoom={[14]}
+            />
+          </Grid>
+          <Grid item>
+            <Button variant='contained' fullWidth>
+              Add Talent
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button variant='contained' color='secondary' fullWidth>
+              Clear Form
+            </Button>
+          </Grid>
         </Grid>
       </Grid>
     </form>
