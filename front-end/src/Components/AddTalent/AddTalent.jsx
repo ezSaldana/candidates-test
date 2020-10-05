@@ -82,7 +82,7 @@ const AddTalent = () => {
   }
 
   return (
-    <form autoComplete='off' onSubmit={handleSubmit}>
+    <form autoComplete='off'>
       <Grid container justify='space-between' spacing={3}
         style={{
           backgroundColor: 'rgba(255,255,255,0.05)',
