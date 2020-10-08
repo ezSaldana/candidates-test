@@ -6,22 +6,22 @@ import {
   Redirect
 } from 'react-router-dom';
 import Market from '../Pages/Market';
-import Mapa from '../Pages/Map';
+import Map from '../Pages/Map';
 import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
-import { useTheme } from '@material-ui/core';
+import { useStyles } from '../Hooks';
+import styles from './styles';
 
 const AppRouter = () => {
-  const theme = useTheme();
+  const classes = useStyles(styles);
   return (
     <Router>
-      <div style={{ display: 'flex', height: '100%'}}>
+      <div className={classes.root}>
         <Navbar />
-        <main style={{ flexGrow: 1, padding: '2.5% 5% 1% 2.5%', marginTop: theme.mixins.toolbar.minHeight,
-        marginBottom: theme.mixins.footer.minHeight }}>
+        <main className={classes.bodyRoot}>
           <Switch>
             <Route exact path='/market' component={Market} />
-            <Route exact path='/map' component={Mapa} />
+            <Route exact path='/map' component={Map} />
             <Redirect to='/market' />
           </Switch>
         </main>
