@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
-  CircularProgress,
   List,
   ListItem,
   ListItemIcon,
+  Paper,
   TextField,
   Typography
 } from '@material-ui/core';
@@ -12,106 +12,113 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import CloseIcon from '@material-ui/icons/Close';
+import { useDispatch } from 'react-redux';
+import { locationCleanup, setAddClearLocation, setAddLocation } from '../../Redux/Actions/candidates';
+import { useStyles } from '../../Hooks';
+import styles from './styles';
 
-const AsyncAutocomplete = ({ setCoords }) => {
+const AsyncAutocomplete = ({ setCoords, query, setQuery }) => {
+  const classes = useStyles(styles);
+
   const [open, setOpen] = useState(false);
-  const [query, setQuery] = useState('');
-  // const search = useRef(null);
-  const locations = useRef(null);
-  const loading = open && locations && query.length > 0;
+  const [loc, setLoc] = useState({ features: [] });
+  // TODO: Arreglar loading
+  // const [loading, setLoading] = useState(false);
+  // let loading = open && loc.features.length === 0;
 
-  const handleChange = ({ target }) => setQuery(target.value);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    let active = true;
+    if (query.trim() !== (undefined || '')) {
+      (async () => {
+        const res = await fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURI(query)}.json?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}&limit=5`)
+          .then(res => res.json());
+        if (active) {
+          setLoc(res);
+        }
+      })();
+    }
+    return () => {
+      active = false;
+    }
+  }, [query]);
+
+  const handleChange = ({ target }) => {
+    setQuery(target.value);
+  }
   const handleFocus = () => setOpen(true);
   const handleFocusOut = (e) => {
     try {
-      const li = e.relatedTarget.className.split(' ').findIndex(className => className.search('searchLI') !== -1);
+      const li = e.relatedTarget?.className.split(' ').findIndex(className => className.search('searchLI') !== -1);
       if (li === -1) {
-        console.log('entro al if focusout');
         setOpen(false);
       }
     } catch (error) {
       setOpen(false);
-      console.log(error);
+      console.error(error);
     }
+  }
+  const handleClearLocation = () => {
+    setQuery('');
+    dispatch(setAddClearLocation());
   }
   const handleSelectLocation = (e) => {
-    locations.current = {
-      features: locations.current.features.filter(feature => feature.id === e.currentTarget.id)
-    }
-    setCoords(locations.current.features[0].center);
+    setLoc({
+      features: loc.features.filter(feature => feature.id === e.currentTarget.id)
+    })
+    setCoords(loc.features[0].center);
     setQuery(e.currentTarget.querySelector('span').innerText);
     setOpen(false);
-  }
-
-  useEffect(() => {
-    let active = true;
-    if (!loading) {
+    const location = dispatch(locationCleanup(loc.features[0]));
+    if (!location) {
+      console.log('Invalid Address');
       return undefined;
     }
-
-    if (query.trim() !== (undefined || '')) {
-      (async (locations) => {
-        const res = await fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURI(query)}.json?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}&limit=5`)
-          .then(res => res.json())
-        if (active) {
-          locations.current = res;
-        }
-      })(locations);
-    }
-
-    return () => {
-      active = false;
-    }
-  }, [loading, query, locations]);
-
-  // useEffect(() => {
-  //   if (!open || query === (undefined || '')) {
-  //     locations.current = null;
-  //   }
-  // }, [open, query]);
+    dispatch(setAddLocation(location));
+  }
 
   return (
-    <div id='searchContainer' onBlur={handleFocusOut} style={{ width: '100%' }}>
-      <TextField
-        id='searchLocation'
-        placeholder='Search Location'
-        style={{width: '100%'}}
-        value={query}
-        onChange={handleChange}
-        onFocus={handleFocus}
-        InputProps={{
-          endAdornment: (
-            <>
-              {loading && <CircularProgress size={22} />}
-              {query !== (undefined || '') && <CloseIcon onClick={() => setQuery('')} style={{ cursor: 'pointer', color: '#fff' }} />}
-              {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-            </>
-          ),
-          disableUnderline: true
-        }}
-      />
+    <div id='searchContainer' onBlur={handleFocusOut} className={classes.root} >
+      <Paper className={classes.paper} >
+        <TextField
+          id='searchLocation'
+          placeholder='Search Location'
+          className={classes.root}
+          value={query}
+          onChange={handleChange}
+          onFocus={handleFocus}
+          InputProps={{
+            endAdornment: (
+              <>
+                {/* {loading && <CircularProgress size={22} />} */}
+                {query !== (undefined || '') && <CloseIcon onClick={handleClearLocation} className={classes.closeIcon} />}
+                {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+              </>
+            ),
+            disableUnderline: true
+          }}
+        />
+      </Paper>
       {
         open
-        && locations.current !== null
+        && loc !== null
         && query !== (undefined || '')
         && (
-          <List
-            style={{ position: 'absolute', backgroundColor: '#333', marginTop: '20px', borderRadius: '5px', width: '300px', padding: 0, overflow: 'hidden', zIndex: 1500 }}
-          >
+          <List className={classes.list}>
             {
-              locations.current.features.map((location) => (
+              loc.features.map((location) => (
                 <ListItem
                   key={location.id}
                   button
-                  className={'searchLI'}
+                  className={'searchLI ' + classes.li}
                   id={location.id}
                   onClick={handleSelectLocation}
-                  style={{ height: 55 }}
                 >
                   <ListItemIcon>
-                    <LocationOnIcon style={{ color: '#fff' }} />
+                    <LocationOnIcon className={classes.locationIcon} />
                   </ListItemIcon>
-                  <Box style={{ overflow: 'hidden' }}>
+                  <Box className={classes.boxStyle}>
                     <Typography noWrap variant='h6' >{location.text}</Typography>
                     <Typography noWrap variant='caption'>{location.place_name}</Typography>
                   </Box>
@@ -121,7 +128,7 @@ const AsyncAutocomplete = ({ setCoords }) => {
           </List>
         )
       }
-    </div>
+    </div >
   )
 }
 
