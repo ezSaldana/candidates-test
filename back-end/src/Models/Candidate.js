@@ -4,41 +4,45 @@ const uniqueValidator = require('mongoose-unique-validator');
 let candidatesSchema = new Schema({
   name: {
     type: String,
-    required: [true, ''],
+    required: [true, 'Field is required'],
   },
   degree: {
     type: Schema.Types.ObjectId,
     ref: 'Degree',
-    required: [true, 'Degree is required'],
+    required: [true, 'Field is required'],
   },
   position: {
     type: Schema.Types.ObjectId,
     ref: 'Position',
+    default: '5f72792d0886d711a0421cd4',
     required: false,
   },
   industry: {
     type: Schema.Types.ObjectId,
     ref: "Industry",
-    required: true,
+    required: [true, 'Field is required'],
   },
   cellphone: {
     type: String,
     unique: true,
-    required: [true, 'Cellphone is required'],
+    required: [true, 'Field is required'],
   },
   salary: {
     type: Number,
-    required: [true, 'Salary is required'],
+    required: [true, 'Field is required'],
   },
   location: {
     type: Schema.Types.ObjectId,
     ref: 'Location',
-    required: [true, 'Location is required'],
+    required: [true, 'Field is required'],
   },
-  avatar: String,
+  avatar: {
+    type: String,
+    required: [true, "Field is required"],
+  },
   addedDate: {
     type: Date,
-    default: new Date(),
+    default: Date.now,
   },
   status: {
     type: Boolean,
@@ -46,6 +50,6 @@ let candidatesSchema = new Schema({
   },
 });
 
-candidatesSchema.plugin(uniqueValidator, { message: '{PATH} ya está registrado, intenta registrar uno nuevo.' });
+candidatesSchema.plugin(uniqueValidator, { message: 'Error, expected \`{PATH}\` to be unique. Value: {VALUE} already registered' });
 
 module.exports = model('Candidates', candidatesSchema);
