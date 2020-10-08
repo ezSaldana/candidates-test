@@ -11,22 +11,21 @@ const locationSchema = new Schema({
       required: [true, "Longitude from coords is required"],
     }
   },
+  address: {
+    type: String,
+    required: [true, "Path is required"],
+  },
   country: {
     type: String,
-    required: [true, "Country is required"],
+    required: [true, "Path is required"],
   },
-  state: {
+  region: {
     type: String,
-    required: [true, "State is required"],
+    required: [true, "Path is required but wasn't found, select another address"],
   },
-  city: {
-    type: String,
-    required: [true, "City is required"],
-  },
-  zipCode: {
-    type: String,
-    required: [true, "Zip Code is required"],
-  },
+  short_code: String,
+  city: String,
+  postcode: String,
 });
 
 module.exports = model('Location', locationSchema);
