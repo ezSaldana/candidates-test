@@ -16,22 +16,33 @@ const theme = createMuiTheme({
   },
   typography: {
     h1: {
-      color: '#fff',
+      color: '#FFF',
     },
     h2: {
-      color: '#fff',
+      color: '#FFF',
     },
     h3: {
-      color: '#fff',
+      color: '#FFF',
     },
     h4: {
-      color: '#fff',
+      color: '#FFF',
     },
     h5: {
-      color: '#fff',
+      color: '#FFF',
     },
     h6: {
-      color: '#fff',
+      color: '#FFF',
+    },
+    subtitle: {
+      color: '#FFF'
+    },
+    subtitle2: {
+      color: '#FFF',
+      fontSize: '18px',
+      lineHeight: '24px',
+      letterSpacing: '0.36px',
+      fontWeight: 700,
+      fontFamily: 'Roboto',
     },
     caption: {
       fontFamily: montserrat,
@@ -82,6 +93,12 @@ const theme = createMuiTheme({
       root: {
         paddingTop: 13,
         paddingBottom: 13,
+        '&$selected': {
+          backgroundColor: '#464651',
+        },
+        '&$selected:hover': {
+          backgroundColor: '#34343C'
+        },
       },
       button: {
         transition: '200ms',
@@ -92,7 +109,18 @@ const theme = createMuiTheme({
             backgroundColor: 'transparent',
           },
         },
-      }
+      },
+      divider: {
+        borderBottom: '1px solid rgba(255,255,255,0.1)'
+      },
+    },
+    MuiListItemText: {
+      primary: {
+        color: '#FFF',
+      },
+      secondary: {
+        color: '#FFF',
+      },
     },
     MuiToolbar: {
       root: {
@@ -155,6 +183,20 @@ const theme = createMuiTheme({
         transition: '300ms',
         '&:hover': {
           backgroundColor: '#6577f6',
+        },
+      },
+      containedSecondary: {
+        border: '1px solid #C51162'
+      },
+      outlined: {
+        border: '1px solid #5C5C5C',
+        transitionDuration: '300ms',
+        transitionDelay: '150ms',
+        borderRadius: 0,
+        '&:hover': {
+          backgroundColor: '#5C5C5C',
+          border: '1px solid #FFF',
+          color: '#FFF',
         }
       },
       label: {
@@ -170,6 +212,51 @@ const theme = createMuiTheme({
     MuiPaper: {
       root: {
         backgroundColor: '#1A1C21',
+      }
+    },
+    MuiTable: {
+      root: {
+        borderCollapse: 'separate',
+        borderSpacing: '0 8px !important',
+        '& tbody tr': {
+          backgroundColor: '#34343C',
+        }
+      }
+    },
+    MuiTableRow: {
+      root: {
+        cursor: 'pointer',
+        transition: '300ms',
+        '&$hover:hover': {
+          backgroundColor: '#222227',
+        },
+      }
+    },
+    MuiTableCell: {
+      root: {
+        fontSize: '14px',
+        fontFamily: 'Roboto',
+        letterSpacing: '0.56px',
+        borderBottom: 'none',
+      },
+      head: {
+        fontWeight: 300,
+        lineHeight: '19px',
+        color: '#CECECE',
+        padding: '0 0'
+      },
+      stickyHeader: {
+        backgroundColor: 'none'
+      },
+      body: {
+        lineHeight: '19px',
+        fontWeight: 300,
+        letterSpacing: '0.28px',
+        color: '#CECECE',
+        '& h6': {
+          color: '#CECECE',
+        },
+        padding: '3px 0',
       }
     }
   }
