@@ -1,28 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   FormControl,
-  makeStyles,
+  MenuItem,
   Select,
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { useDispatch, useSelector } from 'react-redux';
 
-const useStyles = makeStyles(theme => ({
-  icon: {
-    position: 'absolute',
-    right: 0,
-    color: theme.palette.red.main,
-    userSelect: 'none',
-    pointerEvents: 'none',
-  },
-  paper: {
-    width: '200px',
-  }
-}));
+import { setAddSelectSelected } from '../../Redux/Actions/candidates';
+import { useStyles } from '../../Hooks';
+import styles from './styles';
 
-const CustomSelect = ({ children, menuClasses, ...rest }) => {
-  const [val, setVal] = useState(0);
-  const classes = useStyles();
+const CustomSelect = ({ firstItem, menuClasses, select, ...rest }) => {
+  const [val, setVal] = useState(firstItem?.value || '');
+  const classes = useStyles(styles);
+  const dispatch = useDispatch();
+  const {selects} = useSelector(state => state.candidates.addCandidate);
 
+  useEffect(() => {
+    if(select !== undefined && selects[select].selected === '0') {
+      setVal('0');
+    }
+  }, [selects, select])
+  
   const iconComponent = ({ className }) => {
     return (
       <ExpandMoreIcon
@@ -32,7 +32,8 @@ const CustomSelect = ({ children, menuClasses, ...rest }) => {
   };
 
   const handleSelectChange = (e) => {
-    setVal(e.target.value)
+    setVal(e.target.value);
+    dispatch(setAddSelectSelected(select, e.target.value));
   }
 
   const menuProps = {
@@ -52,10 +53,19 @@ const CustomSelect = ({ children, menuClasses, ...rest }) => {
         IconComponent={iconComponent}
         value={val}
       >
-        {children}
+        {
+          firstItem !== undefined
+          && <MenuItem value={firstItem.value}>{firstItem.text}</MenuItem>
+        }
+        {
+          selects[select] !== undefined
+          && selects[select].opts.map(opt => (
+            <MenuItem key={opt._id} value={opt._id} >{opt.name}</MenuItem>
+          ))
+        }
       </Select>
     </FormControl>
   )
 }
 
-export default CustomSelect
+export default CustomSelect;
