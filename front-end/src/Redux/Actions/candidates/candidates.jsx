@@ -57,7 +57,8 @@ export const loadCandidatesState = () => {
 
 const loadCandidatesList = () => {
   return async (dispatch) => {
-    const res = await fetch('http://localhost:1234/candidates').then(res => res.json());
+    const res = await fetch(process.env.REACT_APP_GPAC_CANDIDATES_GET)
+      .then(res => res.json());
     if (res.ok) dispatch(setCandidatesList(res.candidates));
     return res;
   }
@@ -65,12 +66,12 @@ const loadCandidatesList = () => {
 
 const loadAddSelectsOpts = () => {
   return async (dispatch) => {
-    const api = 'http://localhost:1234/degrees';
-    const api1 = 'http://localhost:1234/positions';
-    const api2 = 'http://localhost:1234/industries';
-    const { degrees } = await fetch(api).then(res => res.json());
-    const { positions } = await fetch(api1).then(res => res.json());
-    const { industries } = await fetch(api2).then(res => res.json());
+    const { degrees } = await fetch(process.env.REACT_APP_GPAC_DEGREES_GET)
+      .then(res => res.json());
+    const { positions } = await fetch(process.env.REACT_APP_GPAC_POSITIONS_GET)
+      .then(res => res.json());
+    const { industries } = await fetch(process.env.REACT_APP_GPAC_INDUSTRIES_GET)
+      .then(res => res.json());
     const selects = {
       degrees: { opts: degrees, selected: '0' },
       positions: { opts: positions, selected: '0' },
@@ -142,7 +143,7 @@ export const startAddingCandidate = (candidate) => {
         ? candidate = { ...candidate, avatar: await fileUpload(avatar) }
         : delete candidate.avatar;
       if (position === '0') delete candidate.position;
-      const addedCandidate = await fetch('http://localhost:1234/candidates', {
+      const addedCandidate = await fetch(process.env.REACT_APP_GPAC_CANDIDATES_POST, {
         method: 'POST',
         headers: {
           'Content-type': 'application/json',
@@ -165,13 +166,12 @@ export const startAddingCandidate = (candidate) => {
 }
 
 const fileUpload = async (file) => {
-  const api = 'https://api.cloudinary.com/v1_1/dohlvhhsx/upload';
   const formData = new FormData();
   formData.append('upload_preset', 'gpac-test');
   formData.append('file', file);
 
   try {
-    const res = await fetch(api, {
+    const res = await fetch(process.env.REACT_APP_CLOUDINARY_API, {
       method: 'POST',
       body: formData,
     });
