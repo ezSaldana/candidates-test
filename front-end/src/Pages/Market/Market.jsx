@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import {
   Button,
+  CircularProgress,
   Collapse,
   Grid,
   Typography,
@@ -9,10 +11,18 @@ import {
 
 import { AddIcon } from '../../Assets/Icons';
 import AddTalent from '../../Components/AddTalent';
+import TalentsTable from '../../Components/TalentsTable/TalentsTable';
+import { useLoadCandidates, useStyles } from '../../Hooks';
+import styles from './styles';
 
 const Market = () => {
-  const [newTalent, setNewTalent] = useState(true);
+  const classes = useStyles(styles);
+  const [newTalent, setNewTalent] = useState(false);
+  const [loading, setLoading] = useState(true);
   const theme = useTheme();
+  const { candidatesList } = useSelector(state => state.candidates);
+
+  useLoadCandidates(setLoading);
 
   const handleAddNewTalent = () => {
     setNewTalent(!newTalent);
@@ -25,13 +35,13 @@ const Market = () => {
             <svg height='22px' width='22px' >
               <ellipse cx='11' cy='11' rx='11' ry='11' fill={theme.palette.red.main} />
             </svg>
-            <Typography variant='h5' display='inline' style={{ fontFamily: 'Montserrat', fontWeight: '700', lineHeight: '29px', letterSpacing: '0.48px', marginLeft: 13 }} >Market</Typography>
+            <Typography variant='h5' display='inline' className={classes.marketTypo} >Market</Typography>
           </Grid>
         </Grid>
         <Grid item>
           <Button
             variant='contained'
-            style={{ width: 175 }}
+            className={classes.addTalentBtn}
             onClick={handleAddNewTalent}
             endIcon={<img src={AddIcon} alt='Add new talent icon' />}
           >
@@ -39,13 +49,19 @@ const Market = () => {
           </Button>
         </Grid>
       </Grid>
-      <Grid item style={{padding: '2% 0'}} >
+      <Grid item className={classes.addTalent} >
         <Collapse in={newTalent}>
           <AddTalent />
         </Collapse>
       </Grid>
-      <Grid container item >
-
+      <Grid container item justify='center' alignItems='center' >
+        {
+          candidatesList.length > 0
+            ? <TalentsTable />
+            : loading
+              ? <CircularProgress />
+              : <Typography variant='h2'>No talents added yet!</Typography>
+        }
       </Grid>
     </Grid>
   )
