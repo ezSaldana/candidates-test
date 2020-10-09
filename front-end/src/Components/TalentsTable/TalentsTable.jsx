@@ -24,7 +24,7 @@ const TalentsTable = () => {
     return formatted >= 1 ? { salary: formatted, suffix: true } : { salary, suffix: false };
   }
   return (
-    <TableContainer style={{ maxHeight: '50%', paddingLeft: '65px' }}>
+    <TableContainer className={classes.tableContainer}>
       <Table stickyHeader>
         <TableHead>
           <TableRow>
@@ -33,9 +33,9 @@ const TalentsTable = () => {
             <TableCell>Industry</TableCell>
             <TableCell>Job Position</TableCell>
             <TableCell>Phone</TableCell>
-            <TableCell style={{ width: 75 }}>Salary</TableCell>
-            <TableCell align='center' style={{ width: 100 }}>Location</TableCell>
-            <TableCell style={{ width: 150 }}></TableCell>
+            <TableCell className={classes.salaryCell}>Salary</TableCell>
+            <TableCell align='center' className={classes.locationCell}>Location</TableCell>
+            <TableCell className={classes.buttonCell}></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

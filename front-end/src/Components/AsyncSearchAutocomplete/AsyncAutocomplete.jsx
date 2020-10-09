@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import {
   Box,
   List,
@@ -22,10 +23,6 @@ const AsyncAutocomplete = ({ setCoords, query, setQuery }) => {
 
   const [open, setOpen] = useState(false);
   const [loc, setLoc] = useState({ features: [] });
-  // TODO: Arreglar loading
-  // const [loading, setLoading] = useState(false);
-  // let loading = open && loc.features.length === 0;
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -130,6 +127,12 @@ const AsyncAutocomplete = ({ setCoords, query, setQuery }) => {
       }
     </div >
   )
+}
+
+AsyncAutocomplete.propTypes = {
+  setCoords: PropTypes.func.isRequired,
+  query: PropTypes.string.isRequired,
+  setQuery: PropTypes.func.isRequired
 }
 
 export default AsyncAutocomplete

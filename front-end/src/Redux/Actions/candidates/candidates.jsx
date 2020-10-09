@@ -57,7 +57,7 @@ export const loadCandidatesState = () => {
 
 const loadCandidatesList = () => {
   return async (dispatch) => {
-    const res = await fetch(process.env.REACT_APP_GPAC_CANDIDATES_GET)
+    const res = await fetch(process.env.REACT_APP_GPAC_API_CANDIDATES)
       .then(res => res.json());
     if (res.ok) dispatch(setCandidatesList(res.candidates));
     return res;
@@ -66,11 +66,11 @@ const loadCandidatesList = () => {
 
 const loadAddSelectsOpts = () => {
   return async (dispatch) => {
-    const { degrees } = await fetch(process.env.REACT_APP_GPAC_DEGREES_GET)
+    const { degrees } = await fetch(process.env.REACT_APP_GPAC_API_DEGREES)
       .then(res => res.json());
-    const { positions } = await fetch(process.env.REACT_APP_GPAC_POSITIONS_GET)
+    const { positions } = await fetch(process.env.REACT_APP_GPAC_API_POSITIONS)
       .then(res => res.json());
-    const { industries } = await fetch(process.env.REACT_APP_GPAC_INDUSTRIES_GET)
+    const { industries } = await fetch(process.env.REACT_APP_GPAC_API_INDUSTRIES)
       .then(res => res.json());
     const selects = {
       degrees: { opts: degrees, selected: '0' },
@@ -143,7 +143,7 @@ export const startAddingCandidate = (candidate) => {
         ? candidate = { ...candidate, avatar: await fileUpload(avatar) }
         : delete candidate.avatar;
       if (position === '0') delete candidate.position;
-      const addedCandidate = await fetch(process.env.REACT_APP_GPAC_CANDIDATES_POST, {
+      const addedCandidate = await fetch(process.env.REACT_APP_GPAC_API_CANDIDATES, {
         method: 'POST',
         headers: {
           'Content-type': 'application/json',

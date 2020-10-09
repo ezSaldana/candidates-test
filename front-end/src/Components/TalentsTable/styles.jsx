@@ -4,6 +4,19 @@ export default (theme) => ({
     height: 53,
     width: 53,
   },
+  tableContainer: {
+    maxHeight: '50%',
+    paddingLeft: '65px',
+  },
+  salaryCell: {
+    width: 75,
+  },
+  locationCell: {
+    width: 100,
+  },
+  buttonCell: {
+    width: 150,
+  },
   numberFormatFont: {
     fontSize: '14px',
     lineHeight: '19px',

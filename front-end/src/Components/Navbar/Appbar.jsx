@@ -3,8 +3,6 @@ import {
   AppBar,
   Divider,
   InputBase,
-  makeStyles,
-  MenuItem,
   Paper,
   Toolbar,
   Typography,
@@ -12,45 +10,36 @@ import {
 
 import { SearchIcon, DotsIcon } from '../../Assets/Icons';
 import CustomSelect from '../CustomSelect';
+import { useStyles } from '../../Hooks';
+import styles from './styles';
 
 const Appbar = () => {
-  const classes = makeStyles(theme => ({
-    paper: theme.custom.paper.select,
-  }))();
+  const classes = useStyles(styles);
   return (
-    <AppBar position='fixed' style={{ width: 'calc(100% - 135px)', marginLeft: '135px' }}>
+    <AppBar position='fixed' className={classes.root}>
       <Toolbar>
-        <Paper className={classes.paper} style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }} >
+        <Paper className={classes.paper} >
           <InputBase
-            style={{ width: '200px', fontWeight: '300', fontSize: '15px', lineHeight: '20px', letterSpacing: '0.3px' }}
+            className={classes.inputTypo}
             placeholder='Quick Search...'
             inputProps={{ 'aria-label': 'Quick search' }}
           />
-          <Divider orientation='vertical' flexItem style={{ margin: '5px 20px' }} />
-          <CustomSelect>
-            <MenuItem value={0}>All Entities</MenuItem>
-            <MenuItem value={1}>Entity 1</MenuItem>
-            <MenuItem value={2}>Entity 2</MenuItem>
-            <MenuItem value={3}>Entity 3</MenuItem>
-          </CustomSelect>
-          <Divider orientation='vertical' flexItem style={{ margin: '5px 20px 5px 10px' }} />
-          <CustomSelect>
-            <MenuItem value={0}>Industry</MenuItem>
-            <MenuItem value={1}>Industry 1</MenuItem>
-            <MenuItem value={2}>Industry 2</MenuItem>
-            <MenuItem value={3}>Industry 3</MenuItem>
-          </CustomSelect>
-          <Divider orientation='vertical' flexItem style={{ margin: '5px 20px 5px 10px' }} />
-          <CustomSelect>
-            <MenuItem value={0}>Location</MenuItem>
-            <MenuItem value={1}>Location 1</MenuItem>
-            <MenuItem value={2}>Location 2</MenuItem>
-            <MenuItem value={3}>Location 3</MenuItem>
-          </CustomSelect>
+          <Divider orientation='vertical' flexItem className={classes.divider1} />
+          <CustomSelect
+            firstItem={{ value: '0', text: 'All Entities' }}
+          />
+          <Divider orientation='vertical' flexItem className={classes.divider2} />
+          <CustomSelect
+            firstItem={{value: '0', text: 'Industry'}}
+          />
+          <Divider orientation='vertical' flexItem className={classes.divider2} />
+          <CustomSelect
+            firstItem={{value: '0', text: 'Location'}}
+          />
         </Paper>
-        <img onClick={() => console.log('buscar')} src={SearchIcon} alt="Search Icon" style={{ cursor: 'pointer' }} />
-        <Typography variant='caption' style={{ font: 'normal 300 16px/19px Montserrat', letterSpacing: '0.32px', marginLeft: '10%', flexGrow: 1 }} >Advance Search</Typography>
-        <img src={DotsIcon} alt="Search bar options" style={{ cursor: 'pointer', padding: '20px 0' }} />
+        <img onClick={() => console.log('buscar')} src={SearchIcon} alt="Search Icon" className={classes.imgClick} />
+        <Typography variant='caption' className={classes.advanceSearch} >Advance Search</Typography>
+        <img src={DotsIcon} alt="Search bar options" className={classes.dotsIcon} />
       </Toolbar>
     </AppBar>
   )

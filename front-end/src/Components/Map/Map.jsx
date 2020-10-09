@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 import RMapbox, { Marker } from 'react-mapbox-gl';
 import { Tooltip } from '@material-ui/core';
 import MarkerIcon from '@material-ui/icons/PersonPinCircle';
@@ -7,7 +8,7 @@ import MarkerIcon from '@material-ui/icons/PersonPinCircle';
 import { setActiveMapCandidate } from '../../Redux/Actions/Map';
 
 
-const Map = ({ list, interactive }) => {
+const Map = ({ list, interactive = false }) => {
   const dispatch = useDispatch()
   const { activeCandidate: active, mapOpts: opts } = useSelector(state => state.map);
 
@@ -58,6 +59,11 @@ const Map = ({ list, interactive }) => {
       }
     </RMap>
   )
+}
+
+Map.propTypes = {
+  list: PropTypes.array.isRequired,
+  interactive: PropTypes.bool
 }
 
 export default Map

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import {
   FormControl,
   MenuItem,
@@ -66,6 +67,12 @@ const CustomSelect = ({ firstItem, menuClasses, select, ...rest }) => {
       </Select>
     </FormControl>
   )
+}
+
+CustomSelect.propTypes = {
+  firstItem: PropTypes.object.isRequired,
+  menuClasses: PropTypes.object,
+  select: PropTypes.string,
 }
 
 export default CustomSelect;

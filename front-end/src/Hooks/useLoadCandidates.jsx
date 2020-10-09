@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
 import { loadCandidatesState } from '../Redux/Actions/candidates';
 
 export const useLoadCandidates = (setLoading) => {
@@ -13,4 +14,8 @@ export const useLoadCandidates = (setLoading) => {
       }
     })();
   }, [dispatch, setLoading]);
+}
+
+useLoadCandidates.propTypes = {
+  setLoading: PropTypes.func.isRequired,
 }

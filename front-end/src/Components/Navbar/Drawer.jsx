@@ -7,46 +7,17 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  makeStyles,
   Typography
 } from '@material-ui/core';
 import moment from 'moment';
 
 import { LogoIcon } from '../../Assets/Icons/'
 import { navbarLinks } from '../../Helpers';
-
-const useStyles = makeStyles(theme => ({
-  drawer: {
-    width: theme.mixins.drawer.width,
-    flexShrink: 0,
-  },
-  logo: {
-    paddingTop: '15%',
-    paddingBottom: '25%',
-  },
-  activeLI: {
-    backgroundColor: '#FF3939',
-    '& span': {
-      fontWeight: '700',
-    }
-  },
-  timer: {
-    font: 'normal 700 30px/37px Montserrat',
-    letterSpacing: '0.6px',
-    color: '#CECECE',
-  },
-  date: {
-    font: 'normal 300 10px/13px Montserrat',
-    letterSpacing: '0.2px'
-  },
-  dateHelper: {
-    font: 'normal 300 10px/20px Montserrat',
-    letterSpacing: '0.2px',
-  }
-}));
+import { useStyles } from '../../Hooks';
+import styles from './styles';
 
 const LeftDrawer = () => {
-  const classes = useStyles();
+  const classes = useStyles(styles);
   const [now, setNow] = useState(moment());
 
   useEffect(() => {
@@ -88,7 +59,7 @@ const LeftDrawer = () => {
           ))
         }
       </List>
-      <Grid container direction='column' style={{ padding: '25% 0 0 0' }} >
+      <Grid container direction='column' className={classes.timerContainer} >
         <Grid container item justify='center'>
           <Typography variant='caption' className={classes.date} >{now.format('ddd').toUpperCase()}</Typography>
         </Grid>

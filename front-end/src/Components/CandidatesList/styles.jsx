@@ -12,6 +12,10 @@ export default (theme) => ({
   },
   list: {
     padding: 0,
+    height: '100%',
+  },
+  noCandidates: {
+    marginTop: 40,
   },
   listItem: {
     '&:hover': {
