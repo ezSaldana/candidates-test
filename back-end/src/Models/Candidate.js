@@ -14,7 +14,7 @@ let candidatesSchema = new Schema({
   position: {
     type: Schema.Types.ObjectId,
     ref: 'Position',
-    default: '5f72792d0886d711a0421cd4',
+    default: process.env.MONGO_DEFAULT_POSITION_ID,
     required: false,
   },
   industry: {

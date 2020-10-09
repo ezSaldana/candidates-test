@@ -15,12 +15,15 @@ app.use(bodyParser.json());
 // ==============================
 // PUBLIC
 // ==============================
-app.use(express.static('public'));
+app.use(express.static(__dirname + '/Public'));
 
 // ==============================
 // ROUTES GLOBAL CONFIG
 // ==============================
-app.use(require('./Routes/index'));
+app.use('/api', require('./Routes/index'));
+app.get('*', function(req, res) {
+  res.redirect('/');
+ });
 
 // ==============================
 // EXECUTION
